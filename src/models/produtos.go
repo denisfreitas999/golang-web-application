@@ -53,3 +53,18 @@ func NewProduto(nome, descricao string, preco float64, quantidade int) error {
 	inserirProduto.Exec(nome, descricao, preco, quantidade)
 	return nil
 }
+
+func DeleteProduto(id string) error {
+	db := db.ConnectDB()
+	defer db.Close()
+
+	deletarProduto, err := db.Prepare("delete from produtos where id = $1;")
+
+	if err != nil {
+		log.Println("Erro ao deletar o produto", err)
+		return err
+	}
+
+	deletarProduto.Exec(id)
+	return nil
+}
